@@ -17,9 +17,6 @@ export class StacheLayoutSidebarComponent implements StacheLayout {
   public breadcrumbsRoutes: StacheNavLink[];
 
   @Input()
-  public inPageRoutes: StacheNavLink[];
-
-  @Input()
   public sidebarRoutes: StacheNavLink[];
 
   @Input()

@@ -15,9 +15,6 @@ export class StacheLayoutComponent implements OnInit, StacheLayout {
   public layoutType = 'sidebar';
 
   @Input()
-  public inPageRoutes: StacheNavLink[];
-
-  @Input()
   public showTableOfContents: boolean;
 
   @Input()

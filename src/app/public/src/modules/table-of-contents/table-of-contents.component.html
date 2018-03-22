@@ -1,4 +1,4 @@
-<div *ngIf="routes.length" class="stache-table-of-contents">
+<div *ngIf="routes" class="stache-table-of-contents">
   <div class="stache-table-of-contents-wrapper">
     <div class="stache-table-of-contents-header">
       <h3 class="stache-table-of-contents-heading">
@@ -6,8 +6,11 @@
       </h3>
     </div>
     <div class="stache-table-of-contents-body">
-      <stache-nav navType="table-of-contents" [routes]="routes">
-      </stache-nav>
+      <ol class="stache-nav-list">
+        <li class="stache-nav-list-item" *ngFor="let route of routes">
+          <a class="stache-nav-anchor" (click)="navigate(route)">{{route.name}}</a>
+        </li>
+      </ol>
     </div>
   </div>
 </div>
