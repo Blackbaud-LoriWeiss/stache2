@@ -1,9 +1,17 @@
-import { Component, Input, OnInit, ChangeDetectorRef, OnChanges, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges
+} from '@angular/core';
 
-import { StacheNav, StacheNavLink } from '../nav';
-
-import { StacheTOCService } from '../shared';
-import { StacheNavService } from '../nav';
+import {
+  StacheNav,
+  StacheNavLink,
+  StacheNavService
+} from '../nav';
 
 @Component({
   selector: 'stache-table-of-contents',
@@ -11,35 +19,22 @@ import { StacheNavService } from '../nav';
   styleUrls: ['./table-of-contents.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StacheTableOfContentsComponent implements StacheNav, OnInit, AfterViewInit, OnChanges {
+export class StacheTableOfContentsComponent implements StacheNav, OnChanges {
   @Input()
   public routes: StacheNavLink[] = [];
 
   constructor(
-    private tocService: StacheTOCService,
-    private cdRef: ChangeDetectorRef,
-    private navService: StacheNavService) { }
+    private changeDetector: ChangeDetectorRef,
+    private navService: StacheNavService
+  ) { }
 
-  public ngOnInit() {
-    // this.tocService.subscribe((pageRoutes: StacheNavLink[]) => {
-    //   this.routes = pageRoutes;
-    // console.log(this.routes);
-    this.cdRef.markForCheck();
-    // })
-  }
-
-  public ngAfterViewInit() {
-    console.log(this.routes);
-    // this.cdRef.detectChanges();
-  }
-
-  public ngOnChanges(changes: any) {
-    console.log(changes);
-    if (this.routes && this.routes.length > 0 && changes.currentValue && changes.currentValue !== changes.previousValue) {
-      // this.cdRef.markForCheck();
+  public ngOnChanges(changes: SimpleChanges) {
+    if (changes.routes && !changes.routes.firstChange) {
+      this.routes = changes.routes.currentValue;
+      this.changeDetector.markForCheck();
     }
-    // this.cdRef.detectChanges();
   }
+
   public navigate(route: any): void {
     this.navService.navigate(route);
   }

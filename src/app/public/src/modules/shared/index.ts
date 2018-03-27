@@ -8,5 +8,3 @@ export * from './route-metadata.service';
 export * from './omnibar-adapter.service';
 export * from './shared.module';
 export * from './http.service';
-export * from './table-of-contents.service';
-export * from './page-anchor.service';

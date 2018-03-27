@@ -1,36 +1,41 @@
 /* tslint:disable:component-selector */
 import {
+  ChangeDetectionStrategy,
   Component,
-  OnInit,
+  ElementRef,
   OnDestroy,
-  Input,
-  AfterContentInit,
-  AfterViewInit,
-  ContentChildren,
-  QueryList,
-  ElementRef
+  OnInit,
+  Input
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
-import { Subscription } from 'rxjs';
-
-import { StacheTitleService } from './title.service';
-import { StachePageAnchorComponent } from '../page-anchor';
-import {
-  StacheConfigService,
-  StacheJsonDataService,
-  StachePageAnchorService,
-  StacheTOCService } from '../shared';
-import { StacheNavLink, StacheNavService } from '../nav';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/takeUntil';
 
 const _get = require('lodash.get');
+
+import {
+  StacheNavLink
+} from '../nav';
+
+import {
+  StachePageAnchorService
+} from '../page-anchor';
+
+import {
+  StacheConfigService,
+  StacheJsonDataService
+} from '../shared';
+
+import { StacheTitleService } from './title.service';
 
 @Component({
   selector: 'stache',
   templateUrl: './wrapper.component.html',
-  styleUrls: ['./wrapper.component.scss']
+  styleUrls: ['./wrapper.component.scss'],
+  providers: [StachePageAnchorService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StacheWrapperComponent implements OnInit, OnDestroy, AfterViewInit {
+export class StacheWrapperComponent implements OnInit, OnDestroy {
   @Input()
   public pageTitle: string;
 
@@ -62,88 +67,29 @@ export class StacheWrapperComponent implements OnInit, OnDestroy, AfterViewInit 
   public showBackToTop: boolean = true;
 
   public jsonData: any;
-
   public inPageRoutes: StacheNavLink[];
 
-  private domAnchorRef: HTMLElement[] = [];
-
-  // @ContentChildren(StachePageAnchorComponent, { descendants: true })
-  // private pageAnchors: QueryList<StachePageAnchorComponent>;
-
-  private serviceAnchors: any[] = [];
-
-  private pageAnchorSubscriptions: Subscription[] = [];
+  private ngUnsubscribe = new Subject<boolean>();
 
   public constructor(
     private config: StacheConfigService,
     private dataService: StacheJsonDataService,
+    private elementRef: ElementRef,
     private titleService: StacheTitleService,
-    private route: ActivatedRoute,
-    private tocService: StacheTOCService,
-    private elRef: ElementRef,
-    private anchorService: StachePageAnchorService,
-    private navService: StacheNavService) {
-
-      this.anchorService.subscribe((anchor: any) => {
-        this.serviceAnchors.push(anchor);
-      },
-      null,
-      () => {
-        this.sortServiceAnchors();
-      });
-    }
+    private pageAnchorService: StachePageAnchorService
+  ) { }
 
   public ngOnInit(): void {
     this.titleService.setTitle(this.windowTitle || this.pageTitle);
     this.jsonData = this.dataService.getAll();
-  }
-
-  public ngAfterViewInit() {
-    this.domAnchorRef = [].slice.call(this.elRef.nativeElement.querySelectorAll('stache-page-anchor>div'));
-    this.anchorService.complete();
-    // this.registerPageAnchors();
-    // this.checkRouteHash();
-  }
-
-  public ngOnDestroy(): void {
-    this.destroyPageAnchorSubscriptions();
-  }
-
-  private registerPageAnchors(): void {
-    // this.inPageRoutes = [];
-    // this.destroyPageAnchorSubscriptions();
-    // // Save each subscription so we can unsubscribe after the component is destroyed.
-    // this.pageAnchorSubscriptions = this.pageAnchors.map(
-    //   (anchor: StachePageAnchorComponent, index: number) => {
-
-    //     // First, create a placeholder for the route, until it's processed.
-    //     this.inPageRoutes.push({ name: '', path: '' });
-
-    //     // This will allow the wrapper to subscribe to each Page Anchor's changes.
-    //     return anchor.navLinkStream
-    //       .subscribe((link: StacheNavLink) => {
-    //         this.inPageRoutes[index] = link;
-    //       });
-    //   }
-    // );
-  }
-
-  private sortServiceAnchors() {
-    console.log('???');
-    this.serviceAnchors.map(anchor => {
-      this.domAnchorRef.forEach((anc, idx) => {
-        if(anc.id === anchor.fragment) {
-          anchor.order = idx;
-        }
-        return anchor;
-      })
+    this.pageAnchorService.pageAnchorChanges.subscribe((changes: any[]) => {
+      this.inPageRoutes = this.sortPageAnchors(changes);
     });
+  }
 
-    this.serviceAnchors.sort((a, b) => a.order - b.order);
-    this.tocService.next(this.serviceAnchors);
-
-    this.inPageRoutes = this.serviceAnchors;
-    console.log(this.inPageRoutes);
+  public ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   private checkEditButtonUrl(): boolean {
@@ -151,22 +97,21 @@ export class StacheWrapperComponent implements OnInit, OnDestroy, AfterViewInit 
     return url !== undefined;
   }
 
-  private checkRouteHash(): void {
-    this.route.fragment
-      .subscribe((fragment: string) => {
-        let url = '';
-        this.route.url.subscribe(segments => url = segments.join('/')).unsubscribe();
-        if (fragment) {
-          this.navService.navigate({path: url, fragment});
-        }
-      })
-      .unsubscribe();
-  }
+  private sortPageAnchors(pageAnchors: any[]): any[] {
+    const pageAnchorElements = [].slice.call(
+      this.elementRef.nativeElement.querySelectorAll('.stache-page-anchor')
+    );
 
-  private destroyPageAnchorSubscriptions(): void {
-    this.pageAnchorSubscriptions.forEach((subscription: Subscription) => {
-      subscription.unsubscribe();
+    pageAnchors.forEach(anchor => {
+      pageAnchorElements.forEach((element: HTMLDivElement, idx: number) => {
+        if (element.id === anchor.fragment) {
+          anchor.order = idx;
+        }
+      });
     });
-    this.pageAnchorSubscriptions = [];
+
+    pageAnchors.sort((a, b) => a.order - b.order);
+
+    return pageAnchors;
   }
 }
