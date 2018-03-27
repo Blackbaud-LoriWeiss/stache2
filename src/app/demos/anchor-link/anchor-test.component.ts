@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-
 @Component({
   selector: 'anchor-test',
   templateUrl: './anchor-test.component.html'
@@ -19,7 +18,6 @@ export class StachePageAnchorTestComponent implements OnInit {
   ];
 
   public changeable: string = 'Value One';
-
 
   ngOnInit() {
     setTimeout(() => {

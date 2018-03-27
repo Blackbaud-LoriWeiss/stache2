@@ -86,7 +86,10 @@ export class StacheWrapperComponent implements OnInit, AfterViewInit {
 
   public ngAfterViewInit() {
     this.checkRouteHash();
-    this.pageAnchorElements = [].slice.call(this.elRef.nativeElement.querySelectorAll('.stache-page-anchor'));
+    this.pageAnchorElements = [].slice.call(
+      this.elRef.nativeElement.querySelectorAll('.stache-page-anchor')
+    );
+
     this.sortPageAnchors();
   }
 
@@ -100,7 +103,7 @@ export class StacheWrapperComponent implements OnInit, AfterViewInit {
       })
     });
 
-    this.pageAnchors.sort((a: any, b: any) => a.order - b.order);
+    this.pageAnchors.sort((a: StacheNavLink, b: StacheNavLink) => a.order - b.order);
     this.pageAnchorStream.next(this.pageAnchors);
     this.pageAnchorStream.complete();
   }
