@@ -19,8 +19,8 @@ import { StachePageAnchorComponent } from '../page-anchor';
 import {
   StacheConfigService,
   StacheJsonDataService,
-  StachePageAnchorService,
-  StacheTOCService } from '../shared';
+  StachePageAnchorService } from '../shared';
+
 import { StacheNavLink, StacheNavService } from '../nav';
 
 const _get = require('lodash.get');
@@ -63,23 +63,17 @@ export class StacheWrapperComponent implements OnInit, OnDestroy, AfterViewInit 
 
   public jsonData: any;
 
-  public inPageRoutes: AsyncSubject<any> = new AsyncSubject();
+  public pageAnchorStream: AsyncSubject<any> = new AsyncSubject();
 
-  private domAnchorRef: HTMLElement[] = [];
-
-  // @ContentChildren(StachePageAnchorComponent, { descendants: true })
-  // private pageAnchors: QueryList<StachePageAnchorComponent>;
+  private domAnchorRefs: HTMLElement[] = [];
 
   private serviceAnchors: any[] = [];
-
-  private pageAnchorSubscriptions: Subscription[] = [];
 
   public constructor(
     private config: StacheConfigService,
     private dataService: StacheJsonDataService,
     private titleService: StacheTitleService,
     private route: ActivatedRoute,
-    private tocService: StacheTOCService,
     private elRef: ElementRef,
     private anchorService: StachePageAnchorService,
     private navService: StacheNavService) { }
@@ -94,13 +88,14 @@ export class StacheWrapperComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   public ngAfterViewInit() {
-    this.domAnchorRef = [].slice.call(this.elRef.nativeElement.querySelectorAll('stache-page-anchor>div'));
+    this.checkRouteHash();
+    this.domAnchorRefs = [].slice.call(this.elRef.nativeElement.querySelectorAll('stache-page-anchor>div'));
     this.sortServiceAnchors();
   }
 
   private sortServiceAnchors() {
     this.serviceAnchors.map(anchor => {
-      this.domAnchorRef.forEach((anc, idx) => {
+      this.domAnchorRefs.forEach((anc, idx) => {
         if(anc.id === anchor.fragment) {
           anchor.order = idx;
         }
@@ -109,9 +104,8 @@ export class StacheWrapperComponent implements OnInit, OnDestroy, AfterViewInit 
     });
 
     this.serviceAnchors.sort((a, b) => a.order - b.order);
-    this.tocService.next(this.serviceAnchors);
-    this.inPageRoutes.next(this.serviceAnchors);
-    this.inPageRoutes.complete();
+    this.pageAnchorStream.next(this.serviceAnchors);
+    this.pageAnchorStream.complete();
   }
 
   private checkEditButtonUrl(): boolean {
@@ -119,10 +113,15 @@ export class StacheWrapperComponent implements OnInit, OnDestroy, AfterViewInit 
     return url !== undefined;
   }
 
-  private destroyPageAnchorSubscriptions(): void {
-    this.pageAnchorSubscriptions.forEach((subscription: Subscription) => {
-      subscription.unsubscribe();
-    });
-    this.pageAnchorSubscriptions = [];
+  private checkRouteHash(): void {
+    this.route.fragment
+      .subscribe((fragment: string) => {
+        let url = '';
+        this.route.url.subscribe(segments => url = segments.join('/')).unsubscribe();
+        if (fragment) {
+          this.navService.navigate({path: url, fragment});
+        }
+      })
+      .unsubscribe();
   }
 }

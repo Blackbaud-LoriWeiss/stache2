@@ -20,7 +20,7 @@ import { StacheWindowRef, StachePageAnchorService } from '../shared';
   templateUrl: './page-anchor.component.html',
   styleUrls: ['./page-anchor.component.scss']
 })
-export class StachePageAnchorComponent implements OnInit, StacheNavLink, AfterViewInit, OnChanges {
+export class StachePageAnchorComponent implements OnInit, StacheNavLink, AfterViewInit {
   @Input()
   public inputName: string = '';
 
@@ -28,26 +28,13 @@ export class StachePageAnchorComponent implements OnInit, StacheNavLink, AfterVi
 
   public fragment: string;
   public path: string[];
-  public navLinkStream: Observable<StacheNavLink>;
-
-  private _subject: BehaviorSubject<StacheNavLink>;
 
   public constructor(
     private router: Router,
     private elementRef: ElementRef,
     private windowRef: StacheWindowRef,
     private anchorService: StachePageAnchorService,
-    private cdRef: ChangeDetectorRef) {
-      this._subject = new BehaviorSubject<StacheNavLink>({ name: '', path: '' });
-      this.navLinkStream = this._subject.asObservable();
-    }
-
-  // public ngOnChanges(changes: any): void {
-  //   console.log(changes);
-  //   console.log('changed!', this.name, 'name', this.getName());
-  //   // if (this.name && this.name)
-  //   // this.sendChanges();
-  // }
+    private cdRef: ChangeDetectorRef) { }
 
   public ngOnInit(): void {
     this.name = this.getName();
@@ -85,8 +72,6 @@ export class StachePageAnchorComponent implements OnInit, StacheNavLink, AfterVi
       name: this.name,
       fragment: this.fragment
     } as StacheNavLink
-
-    this._subject.next(anchor);
 
     this.anchorService.next(anchor)
   }

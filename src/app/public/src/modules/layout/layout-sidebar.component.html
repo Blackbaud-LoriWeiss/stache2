@@ -19,7 +19,7 @@
         <ng-content select="[stachePageSummary]"></ng-content>
         <ng-content select="stache-page-summary"></ng-content>
 
-        <stache-table-of-contents [routesObs]="inPageRoutes" *ngIf="showTableOfContents">
+        <stache-table-of-contents [pageAnchorStream]="pageAnchorStream" *ngIf="showTableOfContents">
         </stache-table-of-contents>
 
         <ng-content></ng-content>

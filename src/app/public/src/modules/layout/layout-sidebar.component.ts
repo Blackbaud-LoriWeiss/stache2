@@ -21,7 +21,7 @@ export class StacheLayoutSidebarComponent implements StacheLayout {
   public sidebarRoutes: StacheNavLink[];
 
   @Input()
-  public inPageRoutes: AsyncSubject<any>;
+  public pageAnchorStream: AsyncSubject<any>;
 
   @Input()
   @InputConverter()

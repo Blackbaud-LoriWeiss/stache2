@@ -16,7 +16,7 @@ export class StacheLayoutContainerComponent implements StacheLayout {
   public breadcrumbsRoutes: StacheNavLink[];
 
   @Input()
-  public inPageRoutes: AsyncSubject<any>;
+  public pageAnchorStream: AsyncSubject<any>;
 
   @Input()
   @InputConverter()

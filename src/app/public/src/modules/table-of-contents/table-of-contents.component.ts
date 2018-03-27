@@ -1,10 +1,17 @@
-import { Component, Input, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  ChangeDetectorRef,
+  ChangeDetectionStrategy,
+  OnDestroy } from '@angular/core';
 
-import { StacheNav, StacheNavLink } from '../nav';
-
-import { StacheTOCService } from '../shared';
-import { StacheNavService } from '../nav';
 import { AsyncSubject } from 'rxjs';
+
+import {
+  StacheNav,
+  StacheNavLink,
+  StacheNavService } from '../nav';
 
 @Component({
   selector: 'stache-table-of-contents',
@@ -16,22 +23,21 @@ export class StacheTableOfContentsComponent implements StacheNav, OnInit, OnDest
   public routes: StacheNavLink[] = [];
 
   @Input()
-  routesObs: AsyncSubject<any>;
+  pageAnchorStream: AsyncSubject<any>;
 
   constructor(
-    private tocService: StacheTOCService,
     private cdRef: ChangeDetectorRef,
     private navService: StacheNavService) { }
 
   public ngOnInit() {
-    this.routesObs.subscribe((routes: any) => {
+    this.pageAnchorStream.subscribe((routes: any) => {
       this.routes = routes;
       this.cdRef.detectChanges();
     });
   }
 
   public ngOnDestroy() {
-    this.routesObs.unsubscribe();
+    this.pageAnchorStream.unsubscribe();
   }
 
   public navigate(route: any): void {

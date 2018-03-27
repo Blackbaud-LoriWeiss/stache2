@@ -35,7 +35,7 @@ export class StacheLayoutComponent implements OnInit, StacheLayout {
   public showBackToTop: boolean;
 
   @Input()
-  public inPageRoutes: AsyncSubject<any>;
+  public pageAnchorStream: AsyncSubject<any>;
 
   public templateRef: any;
 
