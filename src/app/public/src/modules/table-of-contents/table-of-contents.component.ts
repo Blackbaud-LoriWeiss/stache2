@@ -10,8 +10,7 @@ import { AsyncSubject } from 'rxjs';
 
 import {
   StacheNav,
-  StacheNavLink,
-  StacheNavService } from '../nav';
+  StacheNavLink } from '../nav';
 
 @Component({
   selector: 'stache-table-of-contents',
@@ -26,13 +25,11 @@ export class StacheTableOfContentsComponent implements StacheNav, OnInit, OnDest
   @Input()
   pageAnchorStream: AsyncSubject<any>;
 
-  constructor(
-    private cdRef: ChangeDetectorRef,
-    private navService: StacheNavService) { }
+  constructor(private cdRef: ChangeDetectorRef) { }
 
   public ngOnInit() {
     if (this.pageAnchorStream) {
-      this.pageAnchorStream.subscribe((routes: any) => {
+      this.pageAnchorStream.subscribe((routes: StacheNavLink[]) => {
         this.routes = routes;
         this.cdRef.detectChanges();
       });
@@ -44,9 +41,5 @@ export class StacheTableOfContentsComponent implements StacheNav, OnInit, OnDest
     if (this.pageAnchorStream) {
       this.pageAnchorStream.unsubscribe();
     }
-  }
-
-  public navigate(route: any): void {
-    this.navService.navigate(route);
   }
 }
