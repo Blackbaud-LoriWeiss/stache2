@@ -25,19 +25,19 @@ export class StacheTableOfContentsComponent implements StacheNav, OnInit, OnDest
   @Input()
   pageAnchorStream: AsyncSubject<any>;
 
-  constructor(private cdRef: ChangeDetectorRef) { }
+  constructor(private changeDetector: ChangeDetectorRef) { }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     if (this.pageAnchorStream) {
       this.pageAnchorStream.subscribe((routes: StacheNavLink[]) => {
         this.routes = routes;
-        this.cdRef.detectChanges();
+        this.changeDetector.detectChanges();
       });
     }
-    this.cdRef.detectChanges();
+    this.changeDetector.detectChanges();
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     if (this.pageAnchorStream) {
       this.pageAnchorStream.unsubscribe();
     }

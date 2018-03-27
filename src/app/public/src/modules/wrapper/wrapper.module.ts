@@ -3,18 +3,18 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { StacheTitleService } from './title.service';
-import { StachePageAnchorModule } from '../page-anchor';
+import { StachePageAnchorService } from '../page-anchor';
 import { StacheLayoutModule } from '../layout';
 import { StacheAnalyticsModule } from '../analytics';
 
 import { StacheWrapperComponent } from './wrapper.component';
+
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     StacheAnalyticsModule,
-    StachePageAnchorModule,
     StacheLayoutModule
   ],
   declarations: [
@@ -24,7 +24,8 @@ import { StacheWrapperComponent } from './wrapper.component';
     StacheWrapperComponent
   ],
   providers: [
-    StacheTitleService
+    StacheTitleService,
+    StachePageAnchorService
   ]
 })
 export class StacheWrapperModule { }

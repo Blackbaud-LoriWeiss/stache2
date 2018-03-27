@@ -8,7 +8,6 @@ import { STACHE_JSON_DATA_PROVIDERS } from './json-data.service';
 import { STACHE_ROUTE_METADATA_PROVIDERS } from './route-metadata.service';
 import { StacheOmnibarAdapterService } from './omnibar-adapter.service';
 import { StacheHttpService } from './http.service';
-import { StachePageAnchorService } from './page-anchor.service';
 
 @NgModule({
   imports: [
@@ -20,7 +19,6 @@ import { StachePageAnchorService } from './page-anchor.service';
     StacheRouteService,
     StacheWindowRef,
     StacheOmnibarAdapterService,
-    StachePageAnchorService,
     STACHE_JSON_DATA_PROVIDERS,
     STACHE_ROUTE_METADATA_PROVIDERS
   ]

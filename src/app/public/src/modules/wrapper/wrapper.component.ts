@@ -15,8 +15,9 @@ import { StacheTitleService } from './title.service';
 
 import {
   StacheConfigService,
-  StacheJsonDataService,
-  StachePageAnchorService } from '../shared';
+  StacheJsonDataService } from '../shared';
+
+import { StachePageAnchorService } from '../page-anchor';
 
 import { StacheNavLink, StacheNavService } from '../nav';
 
@@ -84,7 +85,7 @@ export class StacheWrapperComponent implements OnInit, AfterViewInit {
     this.jsonData = this.dataService.getAll();
   }
 
-  public ngAfterViewInit() {
+  public ngAfterViewInit(): void {
     this.checkRouteHash();
     this.pageAnchorElements = [].slice.call(
       this.elRef.nativeElement.querySelectorAll('.stache-page-anchor')
@@ -93,7 +94,7 @@ export class StacheWrapperComponent implements OnInit, AfterViewInit {
     this.sortPageAnchors();
   }
 
-  private sortPageAnchors() {
+  private sortPageAnchors(): void {
     this.pageAnchors.map((anchor: StacheNavLink) => {
       this.pageAnchorElements.forEach((element: HTMLDivElement, idx: number) => {
         if(element.id === anchor.fragment) {

@@ -19,7 +19,7 @@ export class StachePageAnchorTestComponent implements OnInit {
 
   public changeable: string = 'Value One';
 
-  ngOnInit() {
+  public ngOnInit(): void {
     setTimeout(() => {
       this.changeable = 'different value';
     }, 2000);

@@ -8,8 +8,10 @@ import {
 
 import { Router } from '@angular/router';
 
+import { StachePageAnchorService } from './page-anchor.service';
+
 import { StacheNavLink } from '../nav';
-import { StacheWindowRef, StachePageAnchorService } from '../shared';
+import { StacheWindowRef } from '../shared';
 
 @Component({
   selector: 'stache-page-anchor',
@@ -18,7 +20,6 @@ import { StacheWindowRef, StachePageAnchorService } from '../shared';
 })
 export class StachePageAnchorComponent implements OnInit, StacheNavLink, AfterViewInit {
   public name: string = '';
-
   public fragment: string;
   public path: string[];
 
