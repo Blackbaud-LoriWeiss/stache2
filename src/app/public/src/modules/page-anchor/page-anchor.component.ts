@@ -3,14 +3,10 @@ import {
   Component,
   ElementRef,
   OnInit,
-  AfterViewInit,
-  OnChanges,
-  Input
+  AfterViewInit
 } from '@angular/core';
-import { Router } from '@angular/router';
 
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Router } from '@angular/router';
 
 import { StacheNavLink } from '../nav';
 import { StacheWindowRef, StachePageAnchorService } from '../shared';
@@ -21,9 +17,6 @@ import { StacheWindowRef, StachePageAnchorService } from '../shared';
   styleUrls: ['./page-anchor.component.scss']
 })
 export class StachePageAnchorComponent implements OnInit, StacheNavLink, AfterViewInit {
-  @Input()
-  public inputName: string = '';
-
   public name: string = '';
 
   public fragment: string;
@@ -56,7 +49,7 @@ export class StachePageAnchorComponent implements OnInit, StacheNavLink, AfterVi
   }
 
   private getName(): string {
-    return this.inputName || this.elementRef.nativeElement.textContent.trim();
+    return this.elementRef.nativeElement.textContent.trim();
   }
 
   private getFragment(): string {

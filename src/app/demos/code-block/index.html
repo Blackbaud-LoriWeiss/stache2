@@ -4,8 +4,16 @@
 <stache
   pageTitle="Code Block"
   showBreadcrumbs="false"
-  showTableOfContents="true"
   showEditButton="true">
+
+  <stache-table-of-contents
+    [routes]="[
+    {
+      path: '/bar',
+      name: 'test2',
+      fragment: 'bar'
+    }]">
+  </stache-table-of-contents>
 
   <stache-code-block
     languageType="js">
@@ -188,6 +196,10 @@
       import doctest
       doctest.testmod()
   </stache-code-block>
+
+  <h1 id="bar">
+    BAR
+  </h1>
 
   <stache-code-block
     languageType="sass">
