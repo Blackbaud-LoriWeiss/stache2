@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 
+import { AsyncSubject } from 'rxjs';
+
 import { StacheLayout } from './layout';
 import { StacheNavLink } from '../nav';
 
@@ -31,6 +33,9 @@ export class StacheLayoutComponent implements OnInit, StacheLayout {
 
   @Input()
   public showBackToTop: boolean;
+
+  @Input()
+  public inPageRoutes: AsyncSubject<any>;
 
   public templateRef: any;
 

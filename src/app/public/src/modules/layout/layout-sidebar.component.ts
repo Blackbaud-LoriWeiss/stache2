@@ -3,6 +3,7 @@ import { Component, Input } from '@angular/core';
 import { StacheLayout } from './layout';
 import { InputConverter } from '../shared';
 import { StacheNavLink } from '../nav';
+import { AsyncSubject } from 'rxjs';
 
 @Component({
   selector: 'stache-layout-sidebar',
@@ -18,6 +19,9 @@ export class StacheLayoutSidebarComponent implements StacheLayout {
 
   @Input()
   public sidebarRoutes: StacheNavLink[];
+
+  @Input()
+  public inPageRoutes: AsyncSubject<any>;
 
   @Input()
   @InputConverter()

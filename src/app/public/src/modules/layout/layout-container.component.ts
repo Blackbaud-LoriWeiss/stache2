@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-
+import { AsyncSubject } from 'rxjs';
 import { StacheLayout } from './layout';
 import { InputConverter } from '../shared';
 import { StacheNavLink } from '../nav';
@@ -14,6 +14,9 @@ export class StacheLayoutContainerComponent implements StacheLayout {
 
   @Input()
   public breadcrumbsRoutes: StacheNavLink[];
+
+  @Input()
+  public inPageRoutes: AsyncSubject<any>;
 
   @Input()
   @InputConverter()

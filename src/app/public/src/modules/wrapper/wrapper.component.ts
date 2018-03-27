@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Subscription } from 'rxjs';
+import { Subscription, AsyncSubject } from 'rxjs';
 
 import { StacheTitleService } from './title.service';
 import { StachePageAnchorComponent } from '../page-anchor';
@@ -30,7 +30,7 @@ const _get = require('lodash.get');
   templateUrl: './wrapper.component.html',
   styleUrls: ['./wrapper.component.scss']
 })
-export class StacheWrapperComponent implements OnInit, AfterContentInit, OnDestroy, AfterViewInit {
+export class StacheWrapperComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input()
   public pageTitle: string;
 
@@ -62,12 +62,13 @@ export class StacheWrapperComponent implements OnInit, AfterContentInit, OnDestr
   public showBackToTop: boolean = true;
 
   public jsonData: any;
-  public inPageRoutes: StacheNavLink[] = [];
 
-  private domAnchorRef: HTMLElement[];
+  public inPageRoutes: AsyncSubject<any> = new AsyncSubject();
 
-  @ContentChildren(StachePageAnchorComponent, { descendants: true })
-  private pageAnchors: QueryList<StachePageAnchorComponent>;
+  private domAnchorRef: HTMLElement[] = [];
+
+  // @ContentChildren(StachePageAnchorComponent, { descendants: true })
+  // private pageAnchors: QueryList<StachePageAnchorComponent>;
 
   private serviceAnchors: any[] = [];
 
@@ -81,77 +82,41 @@ export class StacheWrapperComponent implements OnInit, AfterContentInit, OnDestr
     private tocService: StacheTOCService,
     private elRef: ElementRef,
     private anchorService: StachePageAnchorService,
-    private navService: StacheNavService) {
-      this.anchorService.subscribe((anchor: any) => {
-        this.serviceAnchors.push(anchor);
-        if (this.serviceAnchors.length === this.domAnchorRef.length) {
-          this.anchorService.complete();
-        }
-      },
-      null,
-      () => {
-        this.registerPageAnchors();
-      }
-    );
-    }
+    private navService: StacheNavService) { }
 
   public ngOnInit(): void {
+    this.anchorService.subscribe((anchor: any) => {
+      this.serviceAnchors.push(anchor);
+    });
+
     this.titleService.setTitle(this.windowTitle || this.pageTitle);
     this.jsonData = this.dataService.getAll();
   }
 
-  public ngAfterContentInit(): void {
-
-  }
-
   public ngAfterViewInit() {
     this.domAnchorRef = [].slice.call(this.elRef.nativeElement.querySelectorAll('stache-page-anchor>div'));
-    this.registerPageAnchors();
-    this.checkRouteHash();
+    this.sortServiceAnchors();
   }
 
-  public ngOnDestroy(): void {
-    this.destroyPageAnchorSubscriptions();
-  }
+  private sortServiceAnchors() {
+    this.serviceAnchors.map(anchor => {
+      this.domAnchorRef.forEach((anc, idx) => {
+        if(anc.id === anchor.fragment) {
+          anchor.order = idx;
+        }
+        return anchor;
+      })
+    });
 
-  private registerPageAnchors(): void {
-    this.inPageRoutes = [];
-    this.destroyPageAnchorSubscriptions();
-
-    console.log(this.pageAnchors);
-    // Save each subscription so we can unsubscribe after the component is destroyed.
-    this.pageAnchorSubscriptions = this.pageAnchors.map(
-      (anchor: StachePageAnchorComponent, index: number) => {
-
-        // First, create a placeholder for the route, until it's processed.
-        this.inPageRoutes.push({ name: '', path: '' });
-
-        // This will allow the wrapper to subscribe to each Page Anchor's changes.
-        return anchor.navLinkStream
-          .subscribe((link: StacheNavLink) => {
-            this.inPageRoutes[index] = link;
-          });
-      }
-    );
-
-    this.tocService.next(this.inPageRoutes);
+    this.serviceAnchors.sort((a, b) => a.order - b.order);
+    this.tocService.next(this.serviceAnchors);
+    this.inPageRoutes.next(this.serviceAnchors);
+    this.inPageRoutes.complete();
   }
 
   private checkEditButtonUrl(): boolean {
     const url = _get(this.config, 'skyux.appSettings.stache.editButton.url');
     return url !== undefined;
-  }
-
-  private checkRouteHash(): void {
-    this.route.fragment
-      .subscribe((fragment: string) => {
-        let url = '';
-        this.route.url.subscribe(segments => url = segments.join('/')).unsubscribe();
-        if (fragment) {
-          this.navService.navigate({path: url, fragment});
-        }
-      })
-      .unsubscribe();
   }
 
   private destroyPageAnchorSubscriptions(): void {
