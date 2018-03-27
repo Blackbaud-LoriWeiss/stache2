@@ -1,11 +1,12 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 
 import { StacheLayout } from './layout';
 import { StacheNavLink } from '../nav';
 
 @Component({
   selector: 'stache-layout',
-  templateUrl: './layout.component.html'
+  templateUrl: './layout.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StacheLayoutComponent implements OnInit, StacheLayout {
   @Input()
@@ -31,6 +32,9 @@ export class StacheLayoutComponent implements OnInit, StacheLayout {
 
   @Input()
   public showBackToTop: boolean;
+
+  @Input()
+  public inPageRoutes: StacheNavLink[];
 
   public templateRef: any;
 

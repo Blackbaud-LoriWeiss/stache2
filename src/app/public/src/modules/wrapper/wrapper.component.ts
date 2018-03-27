@@ -30,7 +30,7 @@ const _get = require('lodash.get');
   templateUrl: './wrapper.component.html',
   styleUrls: ['./wrapper.component.scss']
 })
-export class StacheWrapperComponent implements OnInit, AfterContentInit, OnDestroy, AfterViewInit {
+export class StacheWrapperComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input()
   public pageTitle: string;
 
@@ -62,12 +62,13 @@ export class StacheWrapperComponent implements OnInit, AfterContentInit, OnDestr
   public showBackToTop: boolean = true;
 
   public jsonData: any;
-  public inPageRoutes: StacheNavLink[] = [];
 
-  private domAnchorRef: HTMLElement[];
+  public inPageRoutes: StacheNavLink[];
 
-  @ContentChildren(StachePageAnchorComponent, { descendants: true })
-  private pageAnchors: QueryList<StachePageAnchorComponent>;
+  private domAnchorRef: HTMLElement[] = [];
+
+  // @ContentChildren(StachePageAnchorComponent, { descendants: true })
+  // private pageAnchors: QueryList<StachePageAnchorComponent>;
 
   private serviceAnchors: any[] = [];
 
@@ -82,17 +83,14 @@ export class StacheWrapperComponent implements OnInit, AfterContentInit, OnDestr
     private elRef: ElementRef,
     private anchorService: StachePageAnchorService,
     private navService: StacheNavService) {
+
       this.anchorService.subscribe((anchor: any) => {
         this.serviceAnchors.push(anchor);
-        if (this.serviceAnchors.length === this.domAnchorRef.length) {
-          this.anchorService.complete();
-        }
       },
       null,
       () => {
-        this.registerPageAnchors();
-      }
-    );
+        this.sortServiceAnchors();
+      });
     }
 
   public ngOnInit(): void {
@@ -100,14 +98,11 @@ export class StacheWrapperComponent implements OnInit, AfterContentInit, OnDestr
     this.jsonData = this.dataService.getAll();
   }
 
-  public ngAfterContentInit(): void {
-
-  }
-
   public ngAfterViewInit() {
     this.domAnchorRef = [].slice.call(this.elRef.nativeElement.querySelectorAll('stache-page-anchor>div'));
-    this.registerPageAnchors();
-    this.checkRouteHash();
+    this.anchorService.complete();
+    // this.registerPageAnchors();
+    // this.checkRouteHash();
   }
 
   public ngOnDestroy(): void {
@@ -115,26 +110,40 @@ export class StacheWrapperComponent implements OnInit, AfterContentInit, OnDestr
   }
 
   private registerPageAnchors(): void {
-    this.inPageRoutes = [];
-    this.destroyPageAnchorSubscriptions();
+    // this.inPageRoutes = [];
+    // this.destroyPageAnchorSubscriptions();
+    // // Save each subscription so we can unsubscribe after the component is destroyed.
+    // this.pageAnchorSubscriptions = this.pageAnchors.map(
+    //   (anchor: StachePageAnchorComponent, index: number) => {
 
-    console.log(this.pageAnchors);
-    // Save each subscription so we can unsubscribe after the component is destroyed.
-    this.pageAnchorSubscriptions = this.pageAnchors.map(
-      (anchor: StachePageAnchorComponent, index: number) => {
+    //     // First, create a placeholder for the route, until it's processed.
+    //     this.inPageRoutes.push({ name: '', path: '' });
 
-        // First, create a placeholder for the route, until it's processed.
-        this.inPageRoutes.push({ name: '', path: '' });
+    //     // This will allow the wrapper to subscribe to each Page Anchor's changes.
+    //     return anchor.navLinkStream
+    //       .subscribe((link: StacheNavLink) => {
+    //         this.inPageRoutes[index] = link;
+    //       });
+    //   }
+    // );
+  }
 
-        // This will allow the wrapper to subscribe to each Page Anchor's changes.
-        return anchor.navLinkStream
-          .subscribe((link: StacheNavLink) => {
-            this.inPageRoutes[index] = link;
-          });
-      }
-    );
+  private sortServiceAnchors() {
+    console.log('???');
+    this.serviceAnchors.map(anchor => {
+      this.domAnchorRef.forEach((anc, idx) => {
+        if(anc.id === anchor.fragment) {
+          anchor.order = idx;
+        }
+        return anchor;
+      })
+    });
 
-    this.tocService.next(this.inPageRoutes);
+    this.serviceAnchors.sort((a, b) => a.order - b.order);
+    this.tocService.next(this.serviceAnchors);
+
+    this.inPageRoutes = this.serviceAnchors;
+    console.log(this.inPageRoutes);
   }
 
   private checkEditButtonUrl(): boolean {

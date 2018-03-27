@@ -16,6 +16,9 @@ export class StacheLayoutContainerComponent implements StacheLayout {
   public breadcrumbsRoutes: StacheNavLink[];
 
   @Input()
+  public inPageRoutes: StacheNavLink[];
+
+  @Input()
   @InputConverter()
   public showBackToTop: boolean;
 

@@ -14,4 +14,8 @@ export class StacheTOCService {
   next(event: any) {
     this.eventBus$.next(event);
   }
+
+  complete() {
+    this.eventBus$.complete();
+  }
 }

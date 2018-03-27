@@ -19,8 +19,8 @@
         <ng-content select="[stachePageSummary]"></ng-content>
         <ng-content select="stache-page-summary"></ng-content>
 
-        <stache-table-of-contents *ngIf="showTableOfContents">
-        </stache-table-of-contents>
+        <stache-table-of-contents *ngIf="showTableOfContents" [routes]="inPageRoutes">
+          </stache-table-of-contents>
 
         <ng-content></ng-content>
 

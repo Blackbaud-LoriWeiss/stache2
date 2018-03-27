@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 import { StacheLayout } from './layout';
 import { InputConverter } from '../shared';
@@ -7,7 +7,8 @@ import { StacheNavLink } from '../nav';
 @Component({
   selector: 'stache-layout-sidebar',
   templateUrl: './layout-sidebar.component.html',
-  styleUrls: ['./layout-sidebar.component.scss']
+  styleUrls: ['./layout-sidebar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StacheLayoutSidebarComponent implements StacheLayout {
   @Input()
@@ -18,6 +19,9 @@ export class StacheLayoutSidebarComponent implements StacheLayout {
 
   @Input()
   public sidebarRoutes: StacheNavLink[];
+
+  @Input()
+  public inPageRoutes: StacheNavLink[];
 
   @Input()
   @InputConverter()
