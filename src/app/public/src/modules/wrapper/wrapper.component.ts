@@ -2,20 +2,17 @@
 import {
   Component,
   OnInit,
-  OnDestroy,
   Input,
-  AfterContentInit,
   AfterViewInit,
-  ContentChildren,
-  QueryList,
   ElementRef
 } from '@angular/core';
+
 import { ActivatedRoute } from '@angular/router';
 
-import { Subscription, AsyncSubject } from 'rxjs';
+import { AsyncSubject } from 'rxjs';
 
 import { StacheTitleService } from './title.service';
-import { StachePageAnchorComponent } from '../page-anchor';
+
 import {
   StacheConfigService,
   StacheJsonDataService,
@@ -30,7 +27,7 @@ const _get = require('lodash.get');
   templateUrl: './wrapper.component.html',
   styleUrls: ['./wrapper.component.scss']
 })
-export class StacheWrapperComponent implements OnInit, OnDestroy, AfterViewInit {
+export class StacheWrapperComponent implements OnInit, AfterViewInit {
   @Input()
   public pageTitle: string;
 
@@ -65,9 +62,9 @@ export class StacheWrapperComponent implements OnInit, OnDestroy, AfterViewInit 
 
   public pageAnchorStream: AsyncSubject<any> = new AsyncSubject();
 
-  private domAnchorRefs: HTMLElement[] = [];
+  private pageAnchorElements: HTMLElement[] = [];
 
-  private serviceAnchors: any[] = [];
+  private pageAnchors: StacheNavLink[] = [];
 
   public constructor(
     private config: StacheConfigService,
@@ -80,7 +77,7 @@ export class StacheWrapperComponent implements OnInit, OnDestroy, AfterViewInit 
 
   public ngOnInit(): void {
     this.anchorService.subscribe((anchor: any) => {
-      this.serviceAnchors.push(anchor);
+      this.pageAnchors.push(anchor);
     });
 
     this.titleService.setTitle(this.windowTitle || this.pageTitle);
@@ -89,22 +86,22 @@ export class StacheWrapperComponent implements OnInit, OnDestroy, AfterViewInit 
 
   public ngAfterViewInit() {
     this.checkRouteHash();
-    this.domAnchorRefs = [].slice.call(this.elRef.nativeElement.querySelectorAll('stache-page-anchor>div'));
-    this.sortServiceAnchors();
+    this.pageAnchorElements = [].slice.call(this.elRef.nativeElement.querySelectorAll('.stache-page-anchor'));
+    this.sortPageAnchors();
   }
 
-  private sortServiceAnchors() {
-    this.serviceAnchors.map(anchor => {
-      this.domAnchorRefs.forEach((anc, idx) => {
-        if(anc.id === anchor.fragment) {
+  private sortPageAnchors() {
+    this.pageAnchors.map((anchor: StacheNavLink) => {
+      this.pageAnchorElements.forEach((element: HTMLDivElement, idx: number) => {
+        if(element.id === anchor.fragment) {
           anchor.order = idx;
         }
         return anchor;
       })
     });
 
-    this.serviceAnchors.sort((a, b) => a.order - b.order);
-    this.pageAnchorStream.next(this.serviceAnchors);
+    this.pageAnchors.sort((a: any, b: any) => a.order - b.order);
+    this.pageAnchorStream.next(this.pageAnchors);
     this.pageAnchorStream.complete();
   }
 
