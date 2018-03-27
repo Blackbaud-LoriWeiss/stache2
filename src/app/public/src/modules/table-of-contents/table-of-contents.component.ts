@@ -20,6 +20,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StacheTableOfContentsComponent implements StacheNav, OnInit, OnDestroy {
+  @Input()
   public routes: StacheNavLink[] = [];
 
   @Input()
@@ -30,14 +31,19 @@ export class StacheTableOfContentsComponent implements StacheNav, OnInit, OnDest
     private navService: StacheNavService) { }
 
   public ngOnInit() {
-    this.pageAnchorStream.subscribe((routes: any) => {
-      this.routes = routes;
-      this.cdRef.detectChanges();
-    });
+    if (this.pageAnchorStream) {
+      this.pageAnchorStream.subscribe((routes: any) => {
+        this.routes = routes;
+        this.cdRef.detectChanges();
+      });
+    }
+    this.cdRef.detectChanges();
   }
 
   public ngOnDestroy() {
-    this.pageAnchorStream.unsubscribe();
+    if (this.pageAnchorStream) {
+      this.pageAnchorStream.unsubscribe();
+    }
   }
 
   public navigate(route: any): void {
