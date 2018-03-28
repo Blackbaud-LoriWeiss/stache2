@@ -6,12 +6,10 @@ import {
   AfterViewInit
 } from '@angular/core';
 
-import { Router } from '@angular/router';
-
 import { StachePageAnchorService } from './page-anchor.service';
 
 import { StacheNavLink } from '../nav';
-import { StacheWindowRef } from '../shared';
+import { StacheWindowRef, StacheRouteService } from '../shared';
 
 @Component({
   selector: 'stache-page-anchor',
@@ -24,7 +22,7 @@ export class StachePageAnchorComponent implements OnInit, StacheNavLink, AfterVi
   public path: string[];
 
   public constructor(
-    private router: Router,
+    private routerService: StacheRouteService,
     private elementRef: ElementRef,
     private windowRef: StacheWindowRef,
     private anchorService: StachePageAnchorService,
@@ -33,13 +31,11 @@ export class StachePageAnchorComponent implements OnInit, StacheNavLink, AfterVi
   public ngOnInit(): void {
     this.name = this.getName();
     this.fragment = this.getFragment();
-    this.path = [this.router.url.split('#')[0]];
+    this.path = [this.routerService.getActiveUrl()];
   }
 
-  public addHashToUrl(): void {
-    let domRect = this.elementRef.nativeElement.getBoundingClientRect();
-    this.windowRef.nativeWindow.scroll(0, domRect.y);
-    this.windowRef.nativeWindow.location.hash = this.fragment;
+  public scrollToAnchor(): void {
+    this.windowRef.nativeWindow.document.querySelector(`#${this.fragment}`).scrollIntoView();
   }
 
   public ngAfterViewInit(): void {
