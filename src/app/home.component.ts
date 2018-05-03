@@ -10,33 +10,33 @@ export class HomeComponent {
       name: 'Action Button 1',
       path: '/demos',
       icon: 'book',
-      summary: 'Short summary here.'
+      summary: 'to Demos.'
     },
     {
       name: 'Action Button 2',
       path: 'mailto:brandon.hare@blackbaud.com',
       icon: 'bookmark',
-      summary: 'Short summary here.'
+      summary: 'Email out'
     },
     {
       name: 'Action Button 3',
       path: 'http://facebook.com',
       icon: 'certificate',
-      summary: 'Short summary here.'
+      summary: 'to facebook'
     },
     {
       name: 'Action Button 4',
       path: '/demos/tutorial/tutorial-one',
       fragment: 'clone-the-repository',
       icon: 'certificate',
-      summary: 'Short summary here.'
+      summary: 'with a fragment demos/tutorial-one#clone-the-repository'
     },
     {
       name: 'Action Button 5',
       path: '/demos/tutorial/tutorial-one',
       fragment: 'does-not-exist',
       icon: 'certificate',
-      summary: 'Short summary here.'
+      summary: 'non existent fragment'
     }
   ];
   public sidebarRoutes = [
