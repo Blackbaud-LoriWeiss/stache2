@@ -30,6 +30,7 @@ import { StacheTutorialModule } from './modules/tutorial';
 import { StacheTutorialStepModule } from './modules/tutorial-step';
 import { StacheVideoModule } from './modules/video';
 import { StacheWrapperModule } from './modules/wrapper';
+import { StacheClipboardModule } from './modules/clipboard/clipboard.module';
 
 export * from './modules/shared';
 
@@ -41,6 +42,7 @@ export * from './modules/shared';
     StacheBackToTopModule,
     StacheBlockquoteModule,
     StacheBreadcrumbsModule,
+    StacheClipboardModule,
     StacheCodeModule,
     StacheCodeBlockModule,
     StacheEditButtonModule,

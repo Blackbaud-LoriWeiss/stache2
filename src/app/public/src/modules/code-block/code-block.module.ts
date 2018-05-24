@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { StacheCodeBlockComponent } from './code-block.component';
+import { StacheClipboardModule } from '../clipboard/clipboard.module';
 
 require('style-loader!prismjs/themes/prism.css');
 
@@ -10,7 +11,8 @@ require('style-loader!prismjs/themes/prism.css');
     StacheCodeBlockComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    StacheClipboardModule
   ],
   exports: [
     StacheCodeBlockComponent
