@@ -3,45 +3,72 @@
 import {
   Directive,
   EventEmitter,
-  HostListener,
-  Input,
   OnDestroy,
-  OnInit,
   Output,
-  Renderer
+  Renderer,
+  ElementRef,
+  AfterViewInit,
+  ChangeDetectorRef
 } from '@angular/core';
 
 import { ClipboardService } from './clipboard.service';
 
 @Directive({
-  selector: '[ngxClipboard]'
+  selector: '[stacheCopy]'
 })
-export class ClipboardDirective implements OnInit, OnDestroy {
-  @Input('ngxClipboard') public targetElm: HTMLInputElement;
-
-  @Input() public cbContent: string;
-
+export class ClipboardDirective implements AfterViewInit, OnDestroy {
   @Output() public cbOnSuccess: EventEmitter<any> = new EventEmitter<any>();
 
   @Output() public cbOnError: EventEmitter<any> = new EventEmitter<any>();
   constructor(
     private clipboardSrv: ClipboardService,
+    private cdr: ChangeDetectorRef,
+    private el: ElementRef,
     private renderer: Renderer
   ) { }
 
-  public ngOnInit() { }
+  private targetElm: any;
+  private button: any;
+  private buttonTemplate: any = '<button class="sky-btn sky-btn-default clipboard-btn"><i class="fa fa-clipboard" /i></button>';
+  private buttonStyles: any =
+  'position: absolute;' +
+  'right: 4px;' +
+  'top: 4px;';
+
+  public ngAfterViewInit() {
+    this.targetElm = this.el.nativeElement;
+    this.targetElm.style.cssText = "position: relative";
+    this.targetElm.insertAdjacentHTML('beforeend', this.buttonTemplate);
+    this.button = this.targetElm.querySelector('.clipboard-btn');
+    this.button.style.cssText = this.buttonStyles + 'opacity: 0;';
+
+    this.button.addEventListener('click', () => {
+      this.onClick();
+    });
+
+    this.targetElm.addEventListener('mouseover', () => {
+      this.button.style.cssText = this.buttonStyles + 'opacity: 100; transition: opacity 300ms;';
+    });
+
+    this.targetElm.addEventListener('mouseout', () => {
+      this.button.style.cssText = this.buttonStyles + 'opacity: 0; transition: opacity 300ms;';
+    });
+
+    this.cdr.detectChanges();
+   }
 
   public ngOnDestroy() {
     this.clipboardSrv.destroy();
   }
 
-  @HostListener('click', ['$event.target']) public onClick() {
+  public onClick() {
+    const content = this.targetElm.outerText.trim();
     if (!this.clipboardSrv.isSupported) {
       this.handleResult(false, undefined);
     } else if (this.targetElm && this.clipboardSrv.isTargetValid(this.targetElm)) {
       this.handleResult(this.clipboardSrv.copyFromInputElement(this.targetElm, this.renderer), this.targetElm.value);
-    } else if (this.cbContent) {
-      this.handleResult(this.clipboardSrv.copyFromContent(this.cbContent, this.renderer), this.cbContent);
+    } else if (content) {
+      this.handleResult(this.clipboardSrv.copyFromContent(content, this.renderer), content);
     }
   }
 

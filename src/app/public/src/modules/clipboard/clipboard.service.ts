@@ -16,15 +16,16 @@ export class ClipboardService {
         return !!this.document.queryCommandSupported && !!this.document.queryCommandSupported('copy');
     }
 
-    public isTargetValid(element: HTMLInputElement | HTMLTextAreaElement): boolean {
+    public isTargetValid(element: any): boolean {
         if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
             if (element.hasAttribute('disabled')) {
                 // tslint:disable-next-line:max-line-length
                 throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');
             }
             return true;
+        } else {
+          return false;
         }
-        throw new Error('Target should be input or textarea');
     }
 
     /**

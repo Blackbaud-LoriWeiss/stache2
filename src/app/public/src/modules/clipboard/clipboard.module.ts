@@ -24,7 +24,8 @@ export function clipboardServiceFactory(doc: Document,
     NgxWindowTokenModule
   ],
   exports: [
-    StacheClipboardComponent
+    StacheClipboardComponent,
+    ClipboardDirective
   ],
   providers: [
     {
