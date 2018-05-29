@@ -14,7 +14,7 @@ import {
 import { ClipboardService } from './clipboard.service';
 
 @Directive({
-  selector: '[stacheCopy]'
+  selector: '[stacheClipboard]'
 })
 export class ClipboardDirective implements AfterViewInit, OnDestroy {
   @Output() public cbOnSuccess: EventEmitter<any> = new EventEmitter<any>();
