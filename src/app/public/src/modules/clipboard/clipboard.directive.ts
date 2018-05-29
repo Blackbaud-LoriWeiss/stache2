@@ -44,6 +44,7 @@ export class ClipboardDirective implements AfterViewInit, OnDestroy {
 
     this.button.addEventListener('click', () => {
       this.onClick();
+      this.copySuccess();
     });
 
     this.targetElm.addEventListener('mouseover', () => {
@@ -70,6 +71,13 @@ export class ClipboardDirective implements AfterViewInit, OnDestroy {
     } else if (content) {
       this.handleResult(this.clipboardSrv.copyFromContent(content, this.renderer), content);
     }
+  }
+
+  public copySuccess() {
+    const icon = this.button.querySelector(".fa");
+
+    icon.className = 'fa fa-check';
+    setTimeout(() => { icon.className = 'fa fa-clipboard' }, 1000);
   }
 
   /**

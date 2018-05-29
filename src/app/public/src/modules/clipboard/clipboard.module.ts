@@ -6,7 +6,6 @@ import { DOCUMENT } from '@angular/platform-browser';
 import { WINDOW } from 'ngx-window-token';
 import { ClipboardDirective } from './clipboard.directive';
 import { ClipboardService } from './clipboard.service';
-import { StacheClipboardComponent } from './clipboard.component';
 
 // this pattern is mentioned in https://github.com/angular/angular/issues/13854 in #43
 export function clipboardServiceFactory(doc: Document,
@@ -16,7 +15,6 @@ export function clipboardServiceFactory(doc: Document,
 
 @NgModule({
   declarations: [
-    StacheClipboardComponent,
     ClipboardDirective
   ],
   imports: [
@@ -24,7 +22,6 @@ export function clipboardServiceFactory(doc: Document,
     NgxWindowTokenModule
   ],
   exports: [
-    StacheClipboardComponent,
     ClipboardDirective
   ],
   providers: [
