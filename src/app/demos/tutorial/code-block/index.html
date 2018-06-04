@@ -1,26 +1,46 @@
 <stache>
-    <stache-code-block languageType="js">
-        $(document).ready(() => {
-          console.log('jQuery is ready!');
-        });
-        <p>Hey! {{name}}</p>
-      </stache-code-block>
+  <stache-code-block languageType="js">
+    DIRECTIVE, ipsum dolor sit amet consectetur adipisicing elit. Natus amet itaque sint! Enim quo ducimus eius qui voluptatem?
+    Labore animi vitae voluptatum voluptate accusamus, id veritatis modi dolorum ut perspiciatis?
+  </stache-code-block>
 
-      <div stacheClipboard>heya
-        <div>nest 1
-          <div>nest 2</div>
-        </div>
+  <br />
+
+  <stache-clipboard>
+    <div>
+      DIRECTIVE
+      <div>nest 1
+        <div>nest 2</div>
       </div>
+    </div>
+  </stache-clipboard>
 
-      <div stacheClipboard>
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus amet itaque sint! Enim quo ducimus eius qui
-        voluptatem? Labore animi vitae voluptatum voluptate accusamus, id veritatis modi dolorum ut perspiciatis?
-      </div>
+  <br />
 
-      <stache-code-block languageType="js">
-          $(document).ready(() => {
-            console.log('jQuery is ready!');
-          });
-          <p>Hey! {{name}}</p>
-        </stache-code-block>
+  <stache-clipboard clipboardTrigger="copyDivContent">
+    <div>
+      DIRECTIVE, ipsum dolor sit amet consectetur adipisicing elit. Natus amet itaque sint! Enim quo ducimus eius qui voluptatem?
+      Labore animi vitae voluptatum voluptate accusamus, id veritatis modi dolorum ut perspiciatis?
+    </div>
+    <button class="sky-btn sky-btn-default" id="copyDivContent">Copy Dis ^^^</button>
+  </stache-clipboard>
+
+  <br />
+
+  <stache-code-block languageType="js">
+    $(document).ready(() => { console.log('jQuery is ready!'); });
+    <p>COMPONENT! {{name}}</p>
+  </stache-code-block>
+
+  <br />
+
+  <stache-clipboard>
+      <textarea>This is the first COMPONENT</textarea>
+  </stache-clipboard>
+
+  <br />
+
+  <stache-clipboard>
+      <input type="text" />
+  </stache-clipboard>
 </stache>

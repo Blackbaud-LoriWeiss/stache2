@@ -1,6 +1,11 @@
 <div class="stache-code-block">
-  <div #codeFromContent class="stache-code-input"><ng-content></ng-content></div>
-  <pre class="stache-code-output" stacheClipboard><code
-    [ngClass]="getClassName()"
-    [innerHTML]="output"></code></pre>
+  <div #codeFromContent class="stache-code-input">
+    <ng-content></ng-content>
+  </div>
+  <stache-clipboard clipboardTrigger="copyCodeButton">
+    <button class="sky-btn sky-btn-default clipboard-btn" id="copyCodeButton">
+      <i class="fa fa-clipboard" /i>
+    </button>
+    <pre class="stache-code-output"><code [ngClass]="getClassName()" [innerHTML]="output"></code></pre>
+  </stache-clipboard>
 </div>

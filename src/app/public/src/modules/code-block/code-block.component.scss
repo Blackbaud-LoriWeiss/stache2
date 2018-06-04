@@ -13,6 +13,16 @@
   margin-bottom: $stache-margin * 2;
 }
 
+.stache-code-block {
+  .clipboard-btn {
+    position: absolute;
+    font-size: 12px;
+    padding: 2px 7px;
+    right: 2px;
+    top: 2px;
+  }
+}
+
 /deep/
 .sky-tab {
   .stache-code-output {
