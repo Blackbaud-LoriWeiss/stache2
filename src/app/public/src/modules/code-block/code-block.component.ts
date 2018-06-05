@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, AfterViewInit, ChangeDetectorRef, ElementRef, Renderer2, HostListener } from '@angular/core';
+import { Component, Input, ViewChild, AfterViewInit, ChangeDetectorRef, ElementRef, Renderer2 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 declare let Prism: any;

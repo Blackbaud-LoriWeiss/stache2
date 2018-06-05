@@ -87,7 +87,7 @@ export class StacheClipboardDirective implements AfterViewInit, OnDestroy {
     }
 
     if (!this.button) {
-      throw new DOMException('No button found');
+      // throw new DOMException(`${this.clipboardTrigger} element not found`);
     }
   }
 }

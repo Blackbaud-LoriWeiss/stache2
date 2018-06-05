@@ -1,16 +1,13 @@
 import { NgModule } from '@angular/core';
 
 import { StacheModule } from './public';
-import { ClipboardModule } from 'ngx-clipboard';
 
 @NgModule({
   imports: [
-    StacheModule,
-    ClipboardModule
+    StacheModule
   ],
   exports: [
-    StacheModule,
-    ClipboardModule
+    StacheModule
   ],
   providers: [],
   declarations: []

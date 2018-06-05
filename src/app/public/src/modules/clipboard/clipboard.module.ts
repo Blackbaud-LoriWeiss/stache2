@@ -1,6 +1,5 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ClipboardModule } from 'ngx-clipboard';
 import { DOCUMENT } from '@angular/platform-browser';
 
 import { ClipboardService } from './clipboard.service';
@@ -22,8 +21,7 @@ export function clipboardServiceFactory(doc: Document,
   ],
   imports: [
     CommonModule,
-    FormsModule,
-    ClipboardModule
+    FormsModule
   ],
   exports: [
     StacheClipboardDirective,
