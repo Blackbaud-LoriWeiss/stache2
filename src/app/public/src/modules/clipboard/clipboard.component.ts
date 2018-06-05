@@ -13,6 +13,9 @@ export class StacheClipboardComponent implements AfterViewInit {
   public customClickHandler: boolean = false;
 
   @Input()
+  public buttonText: string = 'Copy to Clipboard';
+
+  @Input()
   public copyText: string = 'Copied!';
 
   @Input()
@@ -33,6 +36,7 @@ export class StacheClipboardComponent implements AfterViewInit {
   public registerClipboardButton() {
     if (this.clipboardTrigger === this.defaultTigger) {
       this.clipboardButton = <HTMLButtonElement>this.el.nativeElement.querySelector('.clipboard-btn');
+      this.clipboardButton.textContent = this.buttonText;
     } else {
       this.clipboardButton = <HTMLButtonElement>document.querySelector(`#${this.clipboardTrigger}`);
     }
