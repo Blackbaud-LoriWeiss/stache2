@@ -17,17 +17,6 @@ export class ClipboardService {
     return !!this.document.queryCommandSupported && !!this.document.queryCommandSupported('copy');
   }
 
-  public isTargetValid(element: any): boolean {
-    if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
-      if (element.hasAttribute('disabled')) {
-        throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');
-      }
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   /**
    * copyFromInputElement
    */

@@ -8,8 +8,7 @@ import {
   ElementRef,
   AfterViewInit,
   ChangeDetectorRef,
-  Input,
-  ViewChild
+  Input
 } from '@angular/core';
 
 import { ClipboardService } from './clipboard.service';
@@ -18,7 +17,10 @@ import { ClipboardService } from './clipboard.service';
   selector: '[stacheClipboard]'
 })
 export class StacheClipboardDirective implements AfterViewInit, OnDestroy {
-  @Input() public clipboardTrigger: string;
+  private defaultTigger = 'clipboardButton';
+
+  @Input() public clipboardTrigger: string = this.defaultTigger;
+  @Input() public copySuccessText: string;
   @Output() public cbOnSuccess: EventEmitter<any> = new EventEmitter<any>();
   @Output() public cbOnError: EventEmitter<any> = new EventEmitter<any>();
 
@@ -46,15 +48,12 @@ export class StacheClipboardDirective implements AfterViewInit, OnDestroy {
   public onClick(): void {
     const content = [].slice.call(this.targetElm.children).map((child: any) => {
       if (child.type !== 'submit') {
-        console.log(child.type);
         return child.innerText.trim() || child.value.trim();
       }
     }).join('');
 
     if (!this.clipboardSrv.isSupported) {
       this.handleResult(false, undefined);
-    } else if (this.targetElm && this.clipboardSrv.isTargetValid(this.targetElm)) {
-      this.handleResult(this.clipboardSrv.copyFromInputElement(this.targetElm, this.renderer), this.targetElm.value);
     } else if (content) {
       this.handleResult(this.clipboardSrv.copyFromContent(content, this.renderer), content);
     }
@@ -72,24 +71,22 @@ export class StacheClipboardDirective implements AfterViewInit, OnDestroy {
     }
   }
 
-  private copySuccess(): void {
-    // How can we dynamically alert the user that the button did something?
-  }
-
   private createEventListeners(): void {
     if (this.button) {
-      this.button.addEventListener('click', () => {
-        console.log('click');
+      this.renderer.listen(this.button, 'click', () => {
         this.onClick();
-        this.copySuccess();
       });
     }
   }
 
   private instantiateButton() {
     if (this.clipboardTrigger) {
-      this.button = this.el.nativeElement.querySelector(`#${this.clipboardTrigger}`);
-    } else {
+      this.button =
+         this.el.nativeElement.querySelector(`#${this.clipboardTrigger}`) ||
+         document.querySelector(`#${this.clipboardTrigger}`);
+    }
+
+    if (!this.button) {
       throw new DOMException('No button found');
     }
   }

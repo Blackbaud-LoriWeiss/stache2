@@ -15,11 +15,23 @@
 
 .stache-code-block {
   .clipboard-btn {
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
     position: absolute;
     font-size: 12px;
-    padding: 2px 7px;
+    padding: 3px 8px;
     right: 2px;
     top: 2px;
+  }
+
+  .clipboard-btn:focus {
+    opacity: 100;
+  }
+}
+
+.stache-code-block:hover {
+  .clipboard-btn {
+    opacity: 100;
   }
 }
 

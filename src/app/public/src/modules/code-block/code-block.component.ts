@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, ViewChild, AfterViewInit, ChangeDetectorRef, ElementRef, Renderer2, HostListener } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 declare let Prism: any;
@@ -51,13 +51,16 @@ export class StacheCodeBlockComponent implements AfterViewInit {
   public codeTemplateRef: any;
 
   public output: SafeHtml;
+  public clipboardButton: HTMLButtonElement;
   private readonly defaultLanguage: string = 'markup';
   private validLanguages: string[];
   private _languageType: string = this.defaultLanguage;
 
   public constructor(
     private cdRef: ChangeDetectorRef,
-    private sanitizer: DomSanitizer) {
+    private sanitizer: DomSanitizer,
+    private el: ElementRef,
+    private renderer: Renderer2) {
       this.validLanguages = Object.keys(Prism.languages);
     }
 
@@ -73,6 +76,7 @@ export class StacheCodeBlockComponent implements AfterViewInit {
     code = this.formatCode(code);
     code = this.highlightCode(code);
     this.output = this.sanitizer.bypassSecurityTrustHtml(code);
+    this.initializeEventListeners();
     this.cdRef.detectChanges();
   }
 
@@ -94,5 +98,14 @@ export class StacheCodeBlockComponent implements AfterViewInit {
 
   private highlightCode(code: string): string {
     return Prism.highlight(code, Prism.languages[this.languageType]);
+  }
+
+  private initializeEventListeners() {
+    this.clipboardButton = this.el.nativeElement.querySelector('.clipboard-btn');
+    this.renderer.listen(this.clipboardButton, 'click', () => {
+      const icon = this.clipboardButton.querySelector('i');
+      icon.className = 'fa fa-check';
+      setTimeout(() => { icon.className = 'fa fa-clipboard'; }, 1000);
+    });
   }
 }
