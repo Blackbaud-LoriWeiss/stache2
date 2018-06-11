@@ -1,8 +1,8 @@
 <div class="stache-sidebar">
-  <h1 *ngIf="heading" class="stache-sidebar-heading"
-    [routerLink]="headingRoute"
-    [ngClass]="{ 'active': isHeadingActive() }">
-    {{heading}}
+  <h1 role="navigation" *ngIf="heading" [ngClass]="{ 'active': isHeadingActive() }" class="stache-sidebar-heading">
+    <a class="stach-sidebar-heading-link" [stacheRouterLink]="headingRoute">
+      {{heading}}
+    </a>
   </h1>
   <stache-nav navType="sidebar" [routes]="childRoutes">
   </stache-nav>

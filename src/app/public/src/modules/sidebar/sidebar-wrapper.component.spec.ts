@@ -20,7 +20,7 @@ import {
 import { RouterLinkStubDirective } from './fixtures/router-link-stub.directive';
 import { StacheLinkModule } from '../link';
 
-fdescribe('StacheSidebarWrapperComponent', () => {
+describe('StacheSidebarWrapperComponent', () => {
   let component: StacheSidebarWrapperComponent;
   let fixture: ComponentFixture<StacheSidebarWrapperComponent>;
   let mockRouteService: any;
