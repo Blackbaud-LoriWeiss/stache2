@@ -30,6 +30,7 @@ export class StacheSidebarWrapperComponent implements OnInit, OnDestroy {
       .takeUntil(this.ngUnsubscribe)
       .subscribe(() => {
         this.checkWindowWidth();
+        this.updateAriaLabel();
       });
   }
 
@@ -63,9 +64,9 @@ export class StacheSidebarWrapperComponent implements OnInit, OnDestroy {
     let windowWidth = this.windowRef.nativeWindow.innerWidth;
 
     if (windowWidth <= WINDOW_SIZE_MID) {
-      this.sidebarOpen = true;
-    } else {
       this.sidebarOpen = false;
+    } else {
+      this.sidebarOpen = true;
     }
   }
 }

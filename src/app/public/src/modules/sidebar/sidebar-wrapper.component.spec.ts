@@ -20,7 +20,7 @@ import {
 import { RouterLinkStubDirective } from './fixtures/router-link-stub.directive';
 import { StacheLinkModule } from '../link';
 
-describe('StacheSidebarWrapperComponent', () => {
+fdescribe('StacheSidebarWrapperComponent', () => {
   let component: StacheSidebarWrapperComponent;
   let fixture: ComponentFixture<StacheSidebarWrapperComponent>;
   let mockRouteService: any;
@@ -126,19 +126,19 @@ describe('StacheSidebarWrapperComponent', () => {
   });
 
   it('should close the sidebar when the window size is below the WINDOW_SIZE_MID', () => {
-    expect(component.sidebarOpen).toBe(false);
+    component.sidebarOpen = true;
     mockWindowRef.nativeWindow.innerWidth = 10;
     component.ngOnInit();
     fixture.detectChanges();
-    expect(component.sidebarOpen).toBe(true);
+    expect(component.sidebarOpen).toBe(false);
   });
 
   it('should open the sidebar when the window size is above the WINDOW_SIZE_MID', () => {
-    component.sidebarOpen = true;
+    component.sidebarOpen = false;
     mockWindowRef.nativeWindow.innerWidth = 1000;
     component.ngOnInit();
     fixture.detectChanges();
-    expect(component.sidebarOpen).toBe(false);
+    expect(component.sidebarOpen).toBe(true);
   });
 
   it('should call the check the window width on window resize', () => {
@@ -146,6 +146,6 @@ describe('StacheSidebarWrapperComponent', () => {
     mockWindowRef.nativeWindow.innerWidth = 10;
     mockWindowRef.onResize$.next();
     fixture.detectChanges();
-    expect(component.sidebarOpen).toBe(true);
+    expect(component.sidebarOpen).toBe(false);
   });
 });
