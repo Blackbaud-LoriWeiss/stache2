@@ -14,11 +14,12 @@
 
     .stache-sidebar-buttons {
       transition: 300ms;
-      right: -44px;
+      right: -40px;
+      top: 17px;
       border-bottom-right-radius: $stache-border-radius;
       border-top-right-radius: $stache-border-radius;
-      border-right: 1px solid #cdcfd2;
-      border-bottom: 1px solid #cdcfd2;
+      border: 1px solid #cdcfd2;
+      border-left: none;
     }
 
     .stache-sidebar-content {
@@ -38,7 +39,7 @@
     background-color: #fff;
     width: $stache-sidebar-column-width;
     padding: $stache-padding-plus-half;
-    padding-top: 0;
+    padding-top: $stache-padding-half;
     padding-bottom: $stache-padding * 2;
     height: 100%;
     overflow-y: auto;
@@ -47,13 +48,13 @@
   .stache-sidebar-buttons {
     background-color: #fff;
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 5px;
+    top: 20px;
 
     .stache-sidebar-button {
       display: initial;
       color: $stache-text-color-icon-borderless;
-      padding: 12px $stache-padding-plus-half;
+      padding: $stache-padding 14px;
 
       &:hover {
         color: darken($stache-text-color-icon-borderless, 10%);
