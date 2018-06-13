@@ -5,7 +5,7 @@
   z-index: $stache-sidebar-z-index;
   bottom: 0;
   left: 0;
-  border-right: 1px solid #cdcfd2;
+  border-right: 1px solid $stache-border-color-neutral-medium;
 
   &.sidebar-closed {
     border-right: none;
@@ -18,7 +18,7 @@
       top: 17px;
       border-bottom-right-radius: $stache-border-radius;
       border-top-right-radius: $stache-border-radius;
-      border: 1px solid #cdcfd2;
+      border: 1px solid $stache-border-color-neutral-medium;
       border-left: none;
     }
 
@@ -53,11 +53,11 @@
 
     .stache-sidebar-button {
       display: initial;
-      color: $stache-text-color-icon-borderless;
+      color: $stache-text-color-deemphasized;
       padding: $stache-padding 14px;
 
       &:hover {
-        color: darken($stache-text-color-icon-borderless, 10%);
+        color: darken($stache-text-color-deemphasized, 10%);
       }
     }
   }
