@@ -32,7 +32,8 @@
     "@angular/platform-browser": "^4.0.0",
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@angular/router": "^4.0.0",
-    "@blackbaud/skyux": "^2.0.0"
+    "@blackbaud/skyux": "^2.0.0",
+    "@blackbaud/skyux-lib-testing": "1.0.0"
   },
   "dependencies": {
     "@blackbaud/skyux-builder-plugin-stache": "~1.4.0",

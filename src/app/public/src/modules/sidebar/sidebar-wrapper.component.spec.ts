@@ -1,8 +1,8 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 
-import { expect } from '@blackbaud/skyux-builder/runtime/testing/browser';
+import { expect } from '@blackbaud/skyux-lib-testing';
 
 import { StacheSidebarWrapperComponent } from './sidebar-wrapper.component';
 import { StacheSidebarComponent } from './sidebar.component';
@@ -20,7 +20,7 @@ import {
 import { RouterLinkStubDirective } from './fixtures/router-link-stub.directive';
 import { StacheLinkModule } from '../link';
 
-describe('StacheSidebarWrapperComponent', () => {
+fdescribe('StacheSidebarWrapperComponent', () => {
   let component: StacheSidebarWrapperComponent;
   let fixture: ComponentFixture<StacheSidebarWrapperComponent>;
   let mockRouteService: any;
@@ -148,4 +148,8 @@ describe('StacheSidebarWrapperComponent', () => {
     fixture.detectChanges();
     expect(component.sidebarOpen).toBe(false);
   });
+
+  it('should be accessible', async(() => {
+    expect(fixture.debugElement.nativeElement).toBeAccessible();
+  }))
 });

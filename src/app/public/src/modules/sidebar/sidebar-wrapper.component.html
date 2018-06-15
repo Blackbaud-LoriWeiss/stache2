@@ -6,14 +6,14 @@
   <div class="stache-sidebar-buttons">
     <button
       type="button"
-      class="sky-btn sky-btn-link-inline stache-sidebar-button"
+      class="sky-btn sky-btn-default stache-sidebar-button"
       (click)="toggleSidebar()"
       aria-controls="stache-sidebar-content-panel"
       [attr.aria-expanded]="sidebarOpen"
       [attr.aria-label]="sidebarLabel">
 
-      <i *ngIf="sidebarOpen" class="fa fa-close"></i>
-      <i *ngIf="!sidebarOpen" class="fa fa-bars"></i>
+      <i *ngIf="sidebarOpen" class="fa fa-chevron-left"></i>
+      <i *ngIf="!sidebarOpen" class="fa fa-chevron-right"></i>
 
     </button>
   </div>
