@@ -3,9 +3,17 @@ import {
   Component,
   ElementRef,
   OnInit,
-  AfterViewInit
+  AfterViewInit,
+  Input,
+  OnDestroy
 } from '@angular/core';
-
+import {
+  NavigationEnd,
+  Router
+} from '@angular/router';
+import {
+  Subscription
+} from 'rxjs';
 import { StacheNavLink } from '../nav';
 
 import { StachePageAnchorService } from './page-anchor.service';
@@ -16,20 +24,37 @@ import { StacheWindowRef, StacheRouteService } from '../shared';
   templateUrl: './page-anchor.component.html',
   styleUrls: ['./page-anchor.component.scss']
 })
-export class StachePageAnchorComponent implements OnInit, StacheNavLink, AfterViewInit {
+export class StachePageAnchorComponent implements OnInit, StacheNavLink, AfterViewInit, OnDestroy {
 
   public name: string;
   public fragment: string;
   public path: string[];
   public order: number;
 
+  @Input()
+  public anchorId?: string;
+  private subscription: Subscription;
+
   public constructor(
     private routerService: StacheRouteService,
+    private router: Router,
     private elementRef: ElementRef,
     private windowRef: StacheWindowRef,
     private cdRef: ChangeDetectorRef,
     private anchorService: StachePageAnchorService) {
       this.name = '';
+
+      // scroll to entity element if request on the url
+      this.subscription = this.router.events.subscribe(s => {
+        if (s instanceof NavigationEnd) {
+          const tree = this.router.parseUrl(this.router.url);
+          console.log('NavtigationEnd! frag: ', this.fragment, ' tree frag:', tree.fragment);
+          if (tree.fragment && tree.fragment === this.fragment) {
+            const element = document.querySelector('#' + tree.fragment);
+            if (element) { element.scrollIntoView(); }
+          }
+        }
+      });
     }
 
   public ngOnInit(): void {
@@ -50,12 +75,16 @@ export class StachePageAnchorComponent implements OnInit, StacheNavLink, AfterVi
     this.cdRef.detectChanges();
   }
 
+  public ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
   private getName(): string {
     return this.elementRef.nativeElement.textContent.trim();
   }
 
   private getFragment(): string {
-    return this.name
+    return this.anchorId || this.name
       .toLowerCase()
       .replace(/ /g, '-')
       .replace(/[^\w-]+/g, '');
